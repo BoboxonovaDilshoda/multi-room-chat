@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Multi-room Chat</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="app">
+    <header>
+      <h1>Multi-room Chat</h1>
+      <div class="controls">
+        <input id="nickInput" placeholder="Nickname (NICK)" />
+        <input id="roomInput" placeholder="Room (JOIN)" />
+        <button id="btnNick">Set Nick</button>
+        <button id="btnJoin">Join Room</button>
+      </div>
+    </header>
+
+    <main>
+      <div id="chatWrap">
+        <div id="messages" aria-live="polite"></div>
+        
+        <div id="stickerPicker"> 
+          <span class="sticker-item">😊</span>
+          <span class="sticker-item">😂</span>
+          <span class="sticker-item">😍</span>
+          <span class="sticker-item">😭</span>
+          <span class="sticker-item">😎</span>
+          <span class="sticker-item">🥳</span>
+          <span class="sticker-item">🤔</span>
+          <span class="sticker-item">🤫</span>
+          <span class="sticker-item">😡</span>
+          <span class="sticker-item">🤯</span>
+          <span class="sticker-item">👋</span>
+          <span class="sticker-item">👍</span>
+          <span class="sticker-item">🙏</span>
+        </div>
+      </div> 
+      
+      <form id="form" autocomplete="off">
+        <input id="messageInput" placeholder="Write a message..." />
+        <button type="button" id="btnSticker">
+          😂
+        </button>
+        <button type="submit">Send</button>
+      </form>
+    </main>
+
+    <footer>
+      <small>Use commands: NICK &lt;name&gt; , JOIN &lt;room&gt; , or just type message after joining.</small>
+    </footer>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

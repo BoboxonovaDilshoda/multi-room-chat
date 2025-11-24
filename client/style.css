@@ -1,0 +1,245 @@
+/* client/style.css - YAKUNIY VA TO'G'RI KOD (Moviy tugmalar va To'q fon) */
+
+:root {
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  
+  /* Umumiy Ranglar */
+  --bg-color: #ffffff; 
+  --text-color: #212529; 
+  --primary-color: #1565c0;      /* Moviy rang */
+  --primary-hover: #0d47a1; 
+  --border-color-light: #e9ecef; /* Input chegarasi */
+  
+  /* TELEGRAMNING TO'Q RANG PALITRASI */
+  --telegram-bg: #1c2632;           /* Chat oynasining To'q Foni */
+  --message-bg-self: #3292fe;       /* O'zimning xabarim (Och Moviy) */
+  --message-bg-other: #243547;      /* Boshqa xabarlar (To'q Kulrang/Moviy) */
+  --text-color-dark: #ffffff;       /* Matn rangi Oq */
+  --border-color-dark: #3e4a57;     /* Chat ichi uchun to'q chegara */
+  --card-bg: #ffffff;               /* Tashqi Karta (App) Foni Oq */
+  --secondary-text: #adb5bd;        /* Server va yordamchi matnlar rangi */
+}
+
+/* Tashqi ko'rinish */
+body {
+  margin: 0;
+  background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%); 
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+#app {
+  width: 100%;
+  max-width: 900px;
+  margin: 20px;
+  padding: 24px;
+  background: var(--card-bg); 
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* Boshqaruv elementlari (Header) */
+header {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 24px;
+  color: var(--primary-color);
+}
+
+.controls {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+
+.controls input {
+  padding: 10px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color-light); 
+  /* Kerakli bo'shliqni teng bo'lishsin */
+  flex-grow: 1; 
+  max-width: 250px; 
+  transition: border-color 0.2s;
+}
+
+.controls input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+/* TUGMALAR UCHUN STIL (Moviy rang) */
+.controls button {
+  padding: 10px 15px;
+  border-radius: 8px;
+  border: none;
+  background: var(--primary-color); 
+  color: #fff; 
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+  /* Tugmalar joyini saqlab qolsin */
+  flex-shrink: 0; 
+}
+
+.controls button:hover {
+  background: var(--primary-hover);
+}
+
+/* Chat Oynasi - Asosiy Blok (To'q fon) */
+#chatWrap {
+  border: 1px solid var(--border-color-dark); 
+  background: var(--telegram-bg); /* To'q fon tiklandi */
+  border-radius: 8px;
+  height: 400px; 
+  overflow-y: auto;
+  padding: 15px;
+  display: flex;
+  flex-direction: column; 
+  position: relative; 
+}
+
+/* Xabarlar Qatori va Bubble stillari */
+.line {
+  padding: 0;
+  border-bottom: none; 
+  font-size: 15px;
+  margin-bottom: 10px; 
+  display: flex;
+}
+
+.message-bubble {
+    color: var(--text-color-dark); /* Matn Oq */
+    padding: 8px 12px;
+    border-radius: 18px;
+    max-width: 80%;
+    word-wrap: break-word;
+    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
+}
+
+.line.other {
+    justify-content: flex-start;
+}
+.line.other .message-bubble {
+    background-color: var(--message-bg-other); /* Boshqa xabar To'q Kulrang */
+    border-bottom-left-radius: 4px;
+}
+
+.line.self {
+    justify-content: flex-end;
+}
+.line.self .message-bubble {
+    background-color: var(--message-bg-self); /* O'z xabari Moviy */
+    border-bottom-right-radius: 4px;
+}
+
+.server, .room, .you, .text, strong {
+    color: inherit; 
+    font-weight: normal; 
+    margin: 0;
+    display: inline;
+}
+
+.line.other strong {
+    display: block; 
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.server {
+  color: var(--secondary-text); 
+  font-style: italic;
+  font-weight: normal;
+  display: block; 
+}
+
+/* Forma (Yozish qismi) */
+form {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+  position: relative; 
+}
+
+/* Stiker Tugmasi */
+#btnSticker {
+  position: absolute;
+  right: 110px; 
+  top: 50%;
+  transform: translateY(-50%);
+  background: none; 
+  color: #6c757d; 
+  border: none;
+  cursor: pointer;
+  font-size: 20px; 
+  padding: 0 5px;
+  z-index: 10; 
+  transition: color 0.2s;
+}
+
+#btnSticker:hover {
+  color: var(--primary-color); 
+}
+
+/* Input yozish maydoni */
+form input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color-light); 
+  padding-right: 40px; 
+}
+
+/* Forma ichidagi Yuborish tugmasi */
+form button[type="submit"],
+form button[type="button"] { 
+  padding: 12px 18px;
+  border-radius: 8px;
+  border: none;
+  background: var(--primary-color);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s, transform 0.1s;
+}
+
+form button:hover {
+  background: var(--primary-hover);
+}
+
+/* Stiker Paneli */
+#stickerPicker {
+  position: absolute;
+  bottom: 40px; 
+  right: 0px; 
+  width: 250px;
+  background: var(--card-bg); 
+  border: 1px solid var(--border-color-light); 
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  display: none; 
+  flex-wrap: wrap;
+  gap: 5px;
+  z-index: 100;
+}
+
+.sticker-item {
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
+  transition: background-color 0.1s;
+  border-radius: 4px;
+}
+
+.sticker-item:hover {
+  background-color: var(--border-color-light); 
+}
