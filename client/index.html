@@ -35,11 +35,21 @@
                         <h3>Settings</h3>
                         <div class="form-group">
                             <label for="nickInput">Nickname</label>
-                            <input
-                                id="nickInput"
-                                placeholder="Enter your nickname"
-                                type="text"
-                            />
+                            <div class="input-with-clear">
+                                <input
+                                    id="nickInput"
+                                    placeholder="Enter your nickname"
+                                    type="text"
+                                />
+                                <button
+                                    type="button"
+                                    id="clearNick"
+                                    class="input-clear-btn"
+                                    title="Clear"
+                                >
+                                    ✕
+                                </button>
+                            </div>
                             <button id="btnNick">Set</button>
                         </div>
                         <div class="form-group">
@@ -60,12 +70,35 @@
                         </div>
                     </div>
 
+                    <div class="sidebar-section saved-section">
+                        <div class="section-header">
+                            <h3>Saved Rooms</h3>
+                            <button
+                                id="clearRooms"
+                                class="clear-btn"
+                                title="Clear all"
+                            >
+                                ✕
+                            </button>
+                        </div>
+                        <div id="savedRoomsList" class="saved-rooms-list">
+                            <p class="empty-text">No saved rooms</p>
+                        </div>
+                    </div>
+
                     <!-- Footer in Sidebar -->
                     <div class="sidebar-footer">
                         <small
                             >Commands: NICK &lt;name&gt; to set nickname, JOIN
                             &lt;room&gt; to join a room</small
                         >
+                        <button
+                            id="themeToggle"
+                            class="theme-toggle"
+                            title="Toggle dark mode"
+                        >
+                            <span class="theme-icon">🌙</span>
+                        </button>
                     </div>
                 </aside>
 
@@ -75,7 +108,9 @@
                     <div class="chat-header">
                         <div class="chat-header-content">
                             <h2 id="currentRoom">No room selected</h2>
-                            <p id="currentUser" class="user-badge">Guest</p>
+                            <div class="header-right-section">
+                                <p id="currentUser" class="user-badge">Guest</p>
+                            </div>
                         </div>
                     </div>
 

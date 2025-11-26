@@ -22,8 +22,10 @@ const io = new Server(server, {
 
 // in-memory store
 const clients = new Map();
+const messageReactions = new Map(); // messageId -> { oderId: emoji }
 
 const MAX_MSG_LEN = 1000;
+let messageIdCounter = 0;
 
 io.on('connection', socket => {
   const defaultNick = `user-${socket.id.slice(0,4)}`;
@@ -91,9 +93,59 @@ function handleCommand(socket, line) {
     if (!room || !text) return socket.emit('server-message', 'Usage: MSG <room> <message>');
     if (info.room !== room) return socket.emit('server-message', `You are not in ${room}. JOIN first.`);
     if (text.length > MAX_MSG_LEN) return socket.emit('server-message', `Message too long (max ${MAX_MSG_LEN})`);
-    const payload = { room, from: info.nick, text };
+    
+    // Generate unique message ID
+    const msgId = `${Date.now()}-${++messageIdCounter}`;
+    messageReactions.set(msgId, new Map());
+    
+    const payload = { room, from: info.nick, text, msgId };
     io.to(room).emit('room-message', payload);
     console.log(`[MSG] [${room}] ${info.nick}: ${text}`);
+    return;
+  }
+
+  if (cmd === 'REACT') {
+    // Format: REACT <msgId> <emoji> or REACT <msgId> (to remove)
+    const msgId = rest[0];
+    const emoji = rest[1] || null;
+    
+    if (!msgId) return socket.emit('server-message', 'Usage: REACT <msgId> <emoji>');
+    if (!info.room) return socket.emit('server-message', 'Join a room first');
+    
+    let reactions = messageReactions.get(msgId);
+    if (!reactions) {
+      reactions = new Map();
+      messageReactions.set(msgId, reactions);
+    }
+    
+    const oderId = socket.id;
+    const currentEmoji = reactions.get(oderId);
+    
+    if (emoji && currentEmoji === emoji) {
+      // Same emoji clicked - remove reaction
+      reactions.delete(oderId);
+    } else if (emoji) {
+      // New or different emoji - set/replace reaction
+      reactions.set(oderId, emoji);
+    } else {
+      // No emoji provided - remove reaction
+      reactions.delete(oderId);
+    }
+    
+    // Build reactions summary: { emoji: count }
+    const summary = {};
+    for (const [, e] of reactions) {
+      summary[e] = (summary[e] || 0) + 1;
+    }
+    
+    // Broadcast updated reactions to room
+    io.to(info.room).emit('reaction-update', { 
+      msgId, 
+      reactions: summary,
+      userReaction: reactions.get(oderId) || null,
+      oderId
+    });
+    
     return;
   }
   //Yopngi WHOIS buyrug'i qo'shildi
