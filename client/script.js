@@ -7,6 +7,7 @@ const roomInput = document.getElementById("roomInput");
 const btnNick = document.getElementById("btnNick");
 const btnJoin = document.getElementById("btnJoin");
 const messagesEl = document.getElementById("messages");
+const chatWrapEl = document.getElementById("chatWrap");
 const form = document.getElementById("form");
 const messageInput = document.getElementById("messageInput");
 const btnSticker = document.getElementById("btnSticker");
@@ -27,7 +28,16 @@ function appendLine(html, isSelf = false) {
     div.className = "line " + (isSelf ? "self" : "other");
     div.innerHTML = html;
     messagesEl.appendChild(div); // Avtomatik pastga aylantirish (scroll)
-    messagesEl.scrollTop = messagesEl.scrollHeight;
+
+    // Smooth scroll to bottom - scroll the parent container
+    setTimeout(() => {
+        if (chatWrapEl) {
+            chatWrapEl.scrollTo({
+                top: chatWrapEl.scrollHeight,
+                behavior: "smooth",
+            });
+        }
+    }, 0);
 }
 
 function sendCommand(cmdLine) {
@@ -96,6 +106,15 @@ form.addEventListener("submit", (e) => {
     if (!text) return;
     if (currentRoom) {
         sendCommand(`MSG ${currentRoom} ${text}`);
+        // Scroll to bottom when sending
+        setTimeout(() => {
+            if (chatWrapEl) {
+                chatWrapEl.scrollTo({
+                    top: chatWrapEl.scrollHeight,
+                    behavior: "smooth",
+                });
+            }
+        }, 50);
     } else {
         appendLine(`<span class="server">Join a room first (use JOIN)</span>`);
     }
