@@ -1,59 +1,132 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Multi-room Chat</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div id="app">
-    <header>
-      <h1>Multi-room Chat</h1>
-      <div class="controls">
-        <input id="nickInput" placeholder="Nickname (NICK)" />
-        <input id="roomInput" placeholder="Room (JOIN)" />
-        <button id="btnNick">Set Nick</button>
-        <button id="btnJoin">Join Room</button>
-      </div>
-    </header>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <title>Chat Room</title>
+        <link rel="stylesheet" href="style.css" />
+    </head>
+    <body>
+        <div id="app">
+            <div class="main-container">
+                <!-- Sidebar with Logo and Footer -->
+                <aside class="sidebar">
+                    <!-- Logo -->
+                    <div class="sidebar-header">
+                        <div class="logo-container">
+                            <svg
+                                class="logo-icon"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 24 24"
+                                width="44"
+                                height="44"
+                            >
+                                <path fill="none" d="M0 0h24v24H0z" />
+                                <path
+                                    d="M4.929 19.071A9.969 9.969 0 0 1 2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10H2l2.929-2.929zM11 6v12h2V6h-2zM7 9v6h2V9H7zm8 0v6h2V9h-2z"
+                                    fill="rgba(114,105,239,1)"
+                                />
+                            </svg>
+                            <h1 class="logo">Chat Room</h1>
+                        </div>
+                    </div>
 
-    <main>
-      <div id="chatWrap">
-        <div id="messages" aria-live="polite"></div>
-        
-        <div id="stickerPicker"> 
-          <span class="sticker-item">😊</span>
-          <span class="sticker-item">😂</span>
-          <span class="sticker-item">😍</span>
-          <span class="sticker-item">😭</span>
-          <span class="sticker-item">😎</span>
-          <span class="sticker-item">🥳</span>
-          <span class="sticker-item">🤔</span>
-          <span class="sticker-item">🤫</span>
-          <span class="sticker-item">😡</span>
-          <span class="sticker-item">🤯</span>
-          <span class="sticker-item">👋</span>
-          <span class="sticker-item">👍</span>
-          <span class="sticker-item">🙏</span>
+                    <div class="sidebar-section">
+                        <h3>Settings</h3>
+                        <div class="form-group">
+                            <label for="nickInput">Nickname</label>
+                            <input
+                                id="nickInput"
+                                placeholder="Enter your nickname"
+                                type="text"
+                            />
+                            <button id="btnNick">Set</button>
+                        </div>
+                        <div class="form-group">
+                            <label for="roomInput">Room</label>
+                            <input
+                                id="roomInput"
+                                placeholder="Enter room name"
+                                type="text"
+                            />
+                            <button id="btnJoin">Join</button>
+                        </div>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <h3>Active Room</h3>
+                        <div class="room-badge">
+                            <span id="activeRoom">No room</span>
+                        </div>
+                    </div>
+
+                    <!-- Footer in Sidebar -->
+                    <div class="sidebar-footer">
+                        <small
+                            >Commands: NICK &lt;name&gt; to set nickname, JOIN
+                            &lt;room&gt; to join a room</small
+                        >
+                    </div>
+                </aside>
+
+                <!-- Main Chat Area -->
+                <main class="chat-container">
+                    <!-- Chat Header with User Info -->
+                    <div class="chat-header">
+                        <div class="chat-header-content">
+                            <h2 id="currentRoom">No room selected</h2>
+                            <p id="currentUser" class="user-badge">Guest</p>
+                        </div>
+                    </div>
+
+                    <div id="chatWrap">
+                        <div
+                            id="messages"
+                            aria-live="polite"
+                            class="messages-list"
+                        ></div>
+                    </div>
+
+                    <!-- Message Input Form -->
+                    <form id="form" class="message-form" autocomplete="off">
+                        <div class="input-wrapper">
+                            <input
+                                id="messageInput"
+                                placeholder="Type a message..."
+                                type="text"
+                                class="message-input"
+                            />
+                            <button
+                                type="button"
+                                id="btnSticker"
+                                class="emoji-btn"
+                                title="Add emoji"
+                            >
+                                😂
+                            </button>
+                            <div id="stickerPicker" class="emoji-picker">
+                                <span class="sticker-item">😊</span>
+                                <span class="sticker-item">😂</span>
+                                <span class="sticker-item">😍</span>
+                                <span class="sticker-item">😭</span>
+                                <span class="sticker-item">😎</span>
+                                <span class="sticker-item">🥳</span>
+                                <span class="sticker-item">🤔</span>
+                                <span class="sticker-item">🤫</span>
+                                <span class="sticker-item">😡</span>
+                                <span class="sticker-item">🤯</span>
+                                <span class="sticker-item">👋</span>
+                                <span class="sticker-item">👍</span>
+                                <span class="sticker-item">🙏</span>
+                            </div>
+                        </div>
+                        <button type="submit" class="send-btn">Send</button>
+                    </form>
+                </main>
+            </div>
         </div>
-      </div> 
-      
-      <form id="form" autocomplete="off">
-        <input id="messageInput" placeholder="Write a message..." />
-        <button type="button" id="btnSticker">
-          😂
-        </button>
-        <button type="submit">Send</button>
-      </form>
-    </main>
 
-    <footer>
-      <small>Use commands: NICK &lt;name&gt; , JOIN &lt;room&gt; , or just type message after joining.</small>
-    </footer>
-  </div>
-
-  <script src="/socket.io/socket.io.js"></script>
-  <script src="script.js"></script>
-</body>
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="script.js"></script>
+    </body>
 </html>
