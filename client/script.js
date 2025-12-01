@@ -1,4 +1,9 @@
-// client/script.js - Telegram Dizayni uchun To'liq va Yakuniy Kod
+// client/script.js - Multi-Room Chat Client (Homework 3)
+// Team:
+//   Sharifova Durdona Uchkun Kizi (24013572)
+//   Bobokhonova Dilshoda (23013076)
+//   Tillabaev Yosinbek (25013516)
+//   Olimjonov Hojiakbar (23012976)
 const socket = io();
 
 // DOM elementlarini aniqlash

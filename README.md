@@ -1,55 +1,124 @@
-Multi-Room Chat Application
+Multi‑Room Chat Application – Homework 3
 
-This project is a real-time, multi-user chat application built on the Node.js environment, utilizing Express and Socket.IO for seamless, persistent communication. Users can join various topic-based rooms and interact in real-time.
+### Team Information
 
-## Key Features
+- **Sharifova Durdona Uchkun Kizi** – ID: 24013572 – Server Core Developer  
+- **Bobokhonova Dilshoda** – ID: 23013076 – Room & User Management Developer  
+- **Tillabaev Yosinbek** – ID: 25013516 – Client Application Developer  
+- **Olimjonov Hojiakbar** – ID: 23012976 – Testing & Documentation Lead  
 
-* **Real-Time Messaging:** Leverages Socket.IO for establishing WebSockets and enabling fast, two-way communication between the client and server.
-* **Multi-Room Support:** Users can switch between different chat rooms, allowing for topic separation.
-* **User Nicknames:** Users must set a unique nickname before participating in the chat.
-* **Custom Commands:** Support for in-chat commands to manage the user's nickname and room status.
+See `CONTRIBUTION.md` for detailed, per‑member tasks and evidence.
 
-## Technologies Used
+### Project Overview
 
-**Backend (Server):**
+This project is a real‑time, multi‑room chat system built on **TCP** using Node.js’ HTTP server and Socket.IO transport.  
+The server exposes a simple, text‑based command protocol on top of a persistent TCP/WebSocket connection and serves the web client over **HTTP**.
 
-* **Node.js:** JavaScript runtime environment.
-* **Express.js:** Minimalist and flexible Node.js web application framework.
-* **Socket.IO:** Library for real-time application development.
+The system supports multiple named rooms, nicknames, message replies, emoji reactions, and a local “saved rooms” feature on the client.
 
-**Frontend (Client):**
+### Protocol & API (for rubric)
 
-* **HTML/CSS:** Structure and styling of the user interface.
-* **JavaScript:** Client-side logic for handling user input and real-time updates.
+- **Transport:**  
+  - Server uses Node’s `http` module (TCP) plus Socket.IO (WebSocket over HTTP).  
+  - Each browser client maintains one persistent socket connection to the server.
+- **Application protocol (room chat):** simple command format, sent as UTF‑8 strings:
+  - `NICK <name>` – set/update nickname.  
+  - `JOIN <room>` – join or move to a new room.  
+  - `MSG <room> <message...>` – send a message to a room.  
+  - `REACT <msgId> <emoji>` – add / change / remove a reaction on a message.  
+  - `WHOIS <nick>` – query which room a user is in.
+- **Server → client events (via Socket.IO channels):**
+  - `server-message` – informational messages (joins, leaves, errors).  
+  - `room-message` – chat message payload: `{ room, from, text, msgId }`.  
+  - `reaction-update` – updated reaction counts for a message.
 
-## Setup and Installation
+### Features & Functionality
 
-To run this application on your local machine, follow these steps:
+- **Multi‑room chat**
+  - Users can join any room name; server keeps room membership and broadcasts messages only to members of that room.
+  - Each message is tagged with a unique `msgId` so reactions can be tracked per message.
+- **Nicknames**
+  - Nickname is set via the sidebar and persisted in `localStorage` (`chat_nick`).  
+  - The header shows the active nickname; default is `Guest` until user sets one.
+- **Replies (Telegram‑style)**
+  - Clicking **Reply** on a message shows a small reply preview bar above the input.  
+  - The outgoing message encodes reply metadata in the text as  
+    `"[REPLY:<author>:<quoted>]<message>"`.  
+  - The client parses this format and renders a compact quoted block inside the bubble.
+- **Emoji reactions**
+  - Hover over a message → action bar appears → **React** button shows a small emoji picker.  
+  - One reaction per user per message:
+    - Clicking the same emoji again removes your reaction.  
+    - Clicking a different emoji switches your reaction.  
+  - Reactions are broadcast using `REACT`/`reaction-update` so **all clients see the same counts**.
+- **Saved rooms (client‑side)**
+  - Every successful `JOIN` saves the room into `localStorage` (`chat_rooms`).  
+  - Right sidebar shows a scrollable **Saved Rooms** list with:
+    - Room initials icon.  
+    - Room name.  
+    - “Last joined” time (e.g. `5m ago`, `2h ago`).  
+  - Clicking a saved room re‑joins it.  
+  - Per‑room delete button and a global “clear all rooms” button.
+- **Dark mode**
+  - Toggle button in the sidebar switches between light/dark themes.  
+  - Preference is stored in `localStorage` (`darkMode`) and applied on load.
 
-1.  **Clone the Repository:**
-    ```bash
-    git clone [https://github.com/BoboxonovaDilshoda/multi-room-chat.git](https://github.com/BoboxonovaDilshoda/multi-room-chat.git)
-    cd multi-room-chat
-    ```
-2.  **Install Dependencies:**
-    ```bash
-    npm install
-    ```
-3.  **Start the Server:**
-    ```bash
-    node server.js
-    ```
-4.  Open your web browser and navigate to **`http://localhost:5000`**.
+### Code Layout
 
-## In-Chat Commands
+- `server.js` – TCP/HTTP + Socket.IO chat server  
+  - Handles connections, commands (`NICK`, `JOIN`, `MSG`, `REACT`, `WHOIS`), rooms, and reactions.
+- `client/index.html` – Single‑page web UI for the chat client.  
+- `client/style.css` – Full UI styling, including responsive layout, message bubbles, replies, reactions, dark mode, and saved rooms.  
+- `client/script.js` – Client logic:
+  - Connects to server via Socket.IO.  
+  - Sends commands in the defined protocol format.  
+  - Renders messages, replies, reactions, saved rooms, nickname, and theme.  
+- `Makefile` – simple build/run helper.  
+- `package.json` – Node.js metadata and NPM scripts.  
+- `CONTRIBUTION.md` – detailed per‑member breakdown for the individual score.
 
-The application supports the following commands, entered directly into the message input field:
+### Build & Run (for clean checkout)
 
-* **Change Nickname:** `/nick <new_name>`
-* **Join a Room:** `/join <room_name>`
+Requirements:
+- Node.js (v18+ recommended)  
+- npm
 
----
+Steps:
 
-## Author
+1. **Install dependencies**
 
-Dilshoda Boboxonova
+   ```bash
+   make install
+   # or
+   npm install
+   ```
+
+2. **Run the server**
+
+   ```bash
+   make run
+   # or
+   npm start
+   ```
+
+3. **Open the client**
+
+   - Navigate to `http://localhost:5000` in two or more browser windows/tabs.
+
+### Demo Script (15‑minute presentation)
+
+1. **Start server** in one terminal: `make run`.  
+2. **Open two browser windows** at `http://localhost:5000`.  
+3. **Set nicknames** in each window and show that the header and server logs update.  
+4. **Join the same room** (e.g. `re`) from both clients; show server log `[JOIN]` events.  
+5. **Exchange messages**, then demonstrate:
+   - Replying to a message (quote appears inside bubble).  
+   - Adding/removing/swapping emoji reactions and observing them update in both windows.  
+6. **Saved rooms**:
+   - Join several rooms; show that they appear in the **Saved Rooms** list.  
+   - Click a saved room to rejoin it.  
+   - Delete an individual room and use the **Clear all** button.  
+7. **Dark mode**: toggle and refresh to show the preference is persisted.  
+8. Briefly walk through `server.js`, `client/script.js`, and `CONTRIBUTION.md` to highlight roles.
+
+This flow directly supports the rubric items: protocol/API correctness, functionality, code quality, and a clear live demo.
